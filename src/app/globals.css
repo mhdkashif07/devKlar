@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+/* ── Fonts (design tokens Tailwind knows about) ───────────────────────── */
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Fira Code", Menlo,
+    Consolas, monospace;
+}
+
+/* ── Color tokens — theme-switchable at runtime ───────────────────────────
+   Defined on :root (light = default) and overridden for dark via the system
+   media query (unless the user forced light) and via an explicit data-theme.
+   All components read these through `var(--color-*)`, so switching a single
+   attribute on <html> re-themes the whole app with no flash. */
+:root {
+  --color-bg: #f6f7f9;
+  --color-bg-2: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1f3f7;
+  --color-border: #e6e9ef;
+  --color-border-2: #d5dae2;
+  --color-ink: #14171f;
+  --color-ink-2: #464c59;
+  --color-muted: #6a7180;
+  --color-accent: #6d5cff;
+  --color-accent-2: #5b47f5;
+  --color-free: #0f9d6b;
+  --color-warn: #b45309;
+  --glow-1: rgba(109, 92, 255, 0.1);
+  --glow-2: rgba(16, 157, 107, 0.06);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #0a0b0e;
+    --color-bg-2: #0f1116;
+    --color-surface: #14161d;
+    --color-surface-2: #191c25;
+    --color-border: #262a35;
+    --color-border-2: #333846;
+    --color-ink: #eef0f5;
+    --color-ink-2: #b9bfce;
+    --color-muted: #7b8395;
+    --color-accent: #8b7bff;
+    --color-accent-2: #6d5cff;
+    --color-free: #34d399;
+    --color-warn: #fbbf24;
+    --glow-1: rgba(109, 92, 255, 0.14);
+    --glow-2: rgba(52, 211, 153, 0.08);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #0a0b0e;
+  --color-bg-2: #0f1116;
+  --color-surface: #14161d;
+  --color-surface-2: #191c25;
+  --color-border: #262a35;
+  --color-border-2: #333846;
+  --color-ink: #eef0f5;
+  --color-ink-2: #b9bfce;
+  --color-muted: #7b8395;
+  --color-accent: #8b7bff;
+  --color-accent-2: #6d5cff;
+  --color-free: #34d399;
+  --color-warn: #fbbf24;
+  --glow-1: rgba(109, 92, 255, 0.14);
+  --glow-2: rgba(52, 211, 153, 0.08);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* ── base ─────────────────────────────────────────────────────────────── */
+body {
+  background:
+    radial-gradient(1100px 600px at 15% -10%, var(--glow-1), transparent 60%),
+    radial-gradient(900px 520px at 100% 0%, var(--glow-2), transparent 55%),
+    var(--color-bg);
+  background-attachment: fixed;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100dvh;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-2) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border-2);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-rise {
+  animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Gradient headline text */
+.text-gradient {
+  background: linear-gradient(
+    120deg,
+    var(--color-ink) 0%,
+    var(--color-ink-2) 45%,
+    var(--color-accent) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Article / prose styling for content pages (theme-aware) ──────────── */
+.prose {
+  color: var(--color-ink-2);
+  font-size: 16px;
+  line-height: 1.75;
+}
+.prose h2 {
+  color: var(--color-ink);
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin: 2.25rem 0 0.85rem;
+}
+.prose h3 {
+  color: var(--color-ink);
+  font-size: 1.175rem;
+  font-weight: 600;
+  margin: 1.75rem 0 0.6rem;
+}
+.prose p {
+  margin: 0 0 1.1rem;
+}
+.prose ul,
+.prose ol {
+  margin: 0 0 1.1rem;
+  padding-left: 1.35rem;
+}
+.prose li {
+  margin: 0.35rem 0;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose strong {
+  color: var(--color-ink);
+  font-weight: 650;
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.1em 0.4em;
+}
+.prose blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1rem;
+  margin: 1.25rem 0;
+  color: var(--color-ink);
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: 2rem 0;
+}

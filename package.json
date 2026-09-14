@@ -1,0 +1,28 @@
+{
+  "name": "devklar",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Devklar (a devAge project) — describe an app idea, get a verified, region-aware, free-first stack.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "check-keys": "node scripts/check-keys.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.125.0",
+    "next": "^15.5.25",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.0"
+  }
+}
