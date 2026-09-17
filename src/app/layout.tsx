@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+// Footer hidden for now to focus on the tool — re-add <Footer /> below later.
+// import Footer from "@/components/Footer";
 import { SITE, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -107,7 +108,7 @@ export default function RootLayout({
         <div className="flex min-h-dvh flex-col">
           <Header />
           <div className="flex-1">{children}</div>
-          <Footer />
+          {/* <Footer /> hidden for now */}
         </div>
       </body>
     </html>

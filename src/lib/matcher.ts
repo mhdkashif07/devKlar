@@ -41,9 +41,12 @@ const FREE_TYPE_ORDER: Record<FreeType, number> = {
   none: 3,
 };
 
-// Show the top few free options per capability so the user can choose the one
-// that fits them — ranked, best-first. (Was capped at 2; widened to give choice.)
-const MAX_PICKS = 3;
+// How many ranked options to return per capability. The UI shows the top 3 by
+// default and reveals the rest behind a "show more" toggle — so this is the
+// upper bound on choice, not what's shown at rest. Ranked best-first throughout.
+const MAX_PICKS = 6;
+// What the stack card shows before the "show N more" expander.
+export const DEFAULT_VISIBLE_PICKS = 3;
 
 export function matchStack(tags: ExtractedTags): MatchResult {
   const warnings: string[] = [];

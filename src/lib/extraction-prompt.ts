@@ -15,7 +15,7 @@ Return ONLY valid JSON, no markdown, no prose, no backticks. Use exactly this sh
   "payment_subintent": "accept-from-customers" | "receive-own-income"
                        | "subscriptions" | "unsure" | null,
   "country": "PK" | "IN" | "BD" | "NG" | "other" | "unknown",
-  "summary": "one plain sentence restating what they want to build",
+  "summary": "a short neutral description of the app to build, e.g. 'A mobile app that ...'",
   "unmatched": [ ...any needs you couldn't map to an allowed tag... ]
 }
 
@@ -34,4 +34,10 @@ Rules:
 - Most ideas imply database + auth even if unstated — include them when the app
   clearly stores user data or has accounts. Don't over-add otherwise.
 - If country isn't stated, set "country": "unknown" (a button will collect it).
+- "summary" must describe the APP TO BUILD in a short neutral phrase (e.g.
+  "A mobile app that tracks workouts"). NEVER comment on the user or their
+  message (never write "They are asking for...", "The user wants...", etc.).
+- If the input is a question or a research query rather than an app description
+  (e.g. "what database should I use for a mobile app?"), infer the app it
+  implies and classify/summarize THAT — do not refuse or editorialize.
 - Never output anything except the JSON object.`;

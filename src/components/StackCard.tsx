@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import LeadCTA from "@/components/LeadCTA";
+import { DEFAULT_VISIBLE_PICKS } from "@/lib/matcher";
 import type {
   Capability,
   ExtractedTags,
@@ -39,11 +40,34 @@ const GROUPS: { title: string; hint: string; caps: Capability[] }[] = [
   },
 ];
 
-const FREE_LABEL: Record<FreeType, { label: string; cls: string }> = {
-  ongoing: { label: "Ongoing free tier", cls: "text-[var(--color-free)]" },
-  credits: { label: "Free credits", cls: "text-[var(--color-free)]" },
-  trial: { label: "Trial only", cls: "text-[var(--color-warn)]" },
-  none: { label: "No real free tier", cls: "text-[var(--color-muted)]" },
+const FREE_LABEL: Record<
+  FreeType,
+  { label: string; short: string; cls: string; badge: string }
+> = {
+  ongoing: {
+    label: "Ongoing free tier",
+    short: "Free tier",
+    cls: "text-[var(--color-free)]",
+    badge: "border-[var(--color-free)]/30 text-[var(--color-free)]",
+  },
+  credits: {
+    label: "Free credits",
+    short: "Credits",
+    cls: "text-[var(--color-free)]",
+    badge: "border-[var(--color-free)]/30 text-[var(--color-free)]",
+  },
+  trial: {
+    label: "Trial only",
+    short: "Trial",
+    cls: "text-[var(--color-warn)]",
+    badge: "border-[var(--color-warn)]/30 text-[var(--color-warn)]",
+  },
+  none: {
+    label: "No real free tier",
+    short: "No free tier",
+    cls: "text-[var(--color-muted)]",
+    badge: "border-[var(--color-border-2)] text-[var(--color-muted)]",
+  },
 };
 
 export default function StackCard({
@@ -226,23 +250,40 @@ function StarterPrompt({ prompt }: { prompt: string }) {
 }
 
 function ToolBlock({ block }: { block: StackBlock }) {
+  const [showAll, setShowAll] = useState(false);
+  const total = block.picks.length;
+  const visible = showAll
+    ? block.picks
+    : block.picks.slice(0, DEFAULT_VISIBLE_PICKS);
+  const hidden = total - visible.length;
+
   return (
     <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/60 p-4 transition hover:border-[var(--color-border-2)]">
       <div className="mb-3 flex items-center justify-between px-1">
         <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-muted)]">
           {block.label}
         </p>
-        {block.picks.length > 1 && (
+        {total > 1 && (
           <span className="text-[11px] text-[var(--color-muted)]">
-            {block.picks.length} options
+            {total} option{total === 1 ? "" : "s"}
           </span>
         )}
       </div>
       <div className="space-y-2.5">
-        {block.picks.map((pick, i) => (
+        {visible.map((pick, i) => (
           <OptionRow key={pick.toolId} pick={pick} index={i} />
         ))}
       </div>
+      {total > DEFAULT_VISIBLE_PICKS && (
+        <button
+          onClick={() => setShowAll((v) => !v)}
+          className="mt-2.5 w-full rounded-xl border border-dashed border-[var(--color-border-2)] py-2 text-[12px] font-medium text-[var(--color-ink-2)] transition hover:border-[var(--color-accent)]/60 hover:text-[var(--color-ink)]"
+        >
+          {showAll
+            ? "Show fewer"
+            : `Show ${hidden} more free option${hidden === 1 ? "" : "s"}`}
+        </button>
+      )}
     </div>
   );
 }
@@ -279,15 +320,23 @@ function OptionRow({ pick, index }: { pick: Pick; index: number }) {
             </span>
           )}
         </div>
-        <span
-          className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-medium ${
-            pick.requires_card
-              ? "border-[var(--color-warn)]/30 text-[var(--color-warn)]"
-              : "border-[var(--color-free)]/30 text-[var(--color-free)]"
-          }`}
-        >
-          {pick.requires_card ? "Card" : "No card"}
-        </span>
+        <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
+          <span
+            className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${free.badge}`}
+            title="Free-tier strength — how the ranking is ordered"
+          >
+            {free.short}
+          </span>
+          <span
+            className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${
+              pick.requires_card
+                ? "border-[var(--color-warn)]/30 text-[var(--color-warn)]"
+                : "border-[var(--color-free)]/30 text-[var(--color-free)]"
+            }`}
+          >
+            {pick.requires_card ? "Card" : "No card"}
+          </span>
+        </div>
       </div>
 
       <p className={`mt-2 text-[13px] leading-relaxed ${free.cls}`}>
